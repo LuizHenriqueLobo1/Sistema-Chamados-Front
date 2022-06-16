@@ -1,32 +1,39 @@
-import { useState } from 'react';
-import './profile.css';
+import { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 import avatar from '../../assets/avatar.png';
 import { FiSettings, FiUpload } from 'react-icons/fi';
 import { useUserAuth } from '../../contexts/auth';
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/api';
+import { toast } from 'react-toastify';
+import './profile.css';
 
-export default function Profile(){
+export default function Profile() {
   
   const { user, logOut } = useUserAuth();
 
-  const [nome, setNome] = useState(user && user.nome);
-  const [email] = useState(user && user.email);
-  const [avatarUrl, setAvatarUrl] = useState(user && user.avatarUrl);
+  const [nome, setNome]   = useState();
+  const [email, setEmail] = useState();
+  const [avatarUrl, setAvatarUrl] = useState(null);
   const [imageAvatar, setImageAvatar] = useState(null);
 
   const navigate = useNavigate();
 
-  function handleFile(e){
-    
+  useEffect(() => {
+    setEmail(user.email);
+    api
+      .get(`/usuarios/${user.uid}`)
+      .then(response => {
+        setNome(response.data.nome);
+      })
+  }, []);
+
+  function handleUploadImage(imagem) {
+    setAvatarUrl(imagem ? URL.createObjectURL(imagem) : null);
   }
 
   async function handleSave(e) {
-    e.preventDefault();
-  }
-
-  async function handleUpload(e) {
     e.preventDefault();
   }
 
@@ -36,7 +43,7 @@ export default function Profile(){
       await logOut();
       navigate('/');
     } catch(error) {
-      console.log(error);
+      toast('Ocorreu um erro ao tentar deslogar!');
     }
   }
 
@@ -51,28 +58,27 @@ export default function Profile(){
 
 
         <div className="container">
-          <form onSubmit={(e)=>handleSave(e)} className="form-profile">
+          <form onSubmit={ (e) => handleSave(e) } className="form-profile">
             <label className="label-avatar">
               <span>
                 <FiUpload color="#000" size={25} />
               </span>
 
-              <input type="file" accept="image/*" onChange={handleFile}/><br/>
+              <input type="file" accept="image/*" onChange={ e => handleUploadImage(e.target.files[0]) }/><br/>
               { avatarUrl === null ? 
-                <img src={avatar} width="250" height="250" alt="Foto de perfil do usuario" />
+                <img src={ avatar } width="250" height="250" alt="Foto de perfil do usuario" />
                 :
-                <img src={avatarUrl} width="250" height="250" alt="Foto de perfil do usuario" />
+                <img src={ avatarUrl } width="250" height="250" alt="Foto de perfil do usuario" />
               }
             </label>
 
             <label>Nome</label>
-            <input type="text" value={nome} onChange={ (e) => setNome(e.target.value) } />
+            <input type="text" value={ nome } onChange={ (e) => setNome(e.target.value) } />
 
             <label>Email</label>
-            <input type="text" value={email} disabled={true} /> 
+            <input type="text" value={ email } disabled={ true } /> 
 
             <button type="submit">Salvar</button>       
-
           </form>
         </div>
 
