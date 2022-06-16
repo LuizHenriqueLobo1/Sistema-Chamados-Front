@@ -41,7 +41,7 @@ export default function SignIn() {
           <img src={logo} alt="Logo do Sistema"/>
         </div>
         
-        <form onSubmit={handleSubmit}>
+        <form>
           <h1>Entrar</h1>
           <input type="text"     placeholder="email@email.com" ref={ email }/>
           <input type="password" placeholder="*****"           ref={ senha }/>
