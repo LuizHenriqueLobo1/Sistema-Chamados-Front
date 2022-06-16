@@ -1,7 +1,8 @@
-import logo from '../../assets/login.png'
-import { Link, useNavigate } from 'react-router-dom'
+import logo from '../../assets/login.png';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import { useUserAuth } from '../../contexts/auth';
+import api from '../../services/api';
 
 export default function SignUp() {
 
@@ -24,9 +25,13 @@ export default function SignUp() {
     try {
       await signUp(
         email.current.value,
-        senha.current.value,
-        nome.current.value
-      );
+        senha.current.value
+      ).then(response => {
+        api.post('/usuarios', {
+          id:   response.user.uid,
+          nome: nome.current.value
+        });
+      });
       navigate('/dashboard');
     } catch(error) {
       switch(error.code) {
