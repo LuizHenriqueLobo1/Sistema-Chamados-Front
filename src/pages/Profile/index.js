@@ -15,8 +15,9 @@ export default function Profile() {
 
   const [nome, setNome]   = useState();
   const [email, setEmail] = useState();
+
+  const [avatarImagem, setAvatarImagem] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
-  const [imageAvatar, setImageAvatar] = useState(null);
 
   const navigate = useNavigate();
 
@@ -26,15 +27,26 @@ export default function Profile() {
       .get(`/usuarios/${user.uid}`)
       .then(response => {
         setNome(response.data.nome);
-      })
+      });
   }, []);
 
+
   function handleUploadImage(imagem) {
-    setAvatarUrl(imagem ? URL.createObjectURL(imagem) : null);
+    setAvatarUrl(imagem ? imagem : null);
+    setAvatarImagem(imagem ? URL.createObjectURL(imagem) : null);
   }
 
   async function handleSave(e) {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append('id', user.uid);
+    formData.append('nome', nome);
+    formData.append('imagem', avatarUrl);
+    const header = { "Content-Type": "multipart/form-data" };
+    api
+      .put(`/usuarios/${user.uid}`, formData, header)
+      .then(_ =>  toast('Usuário atualizado com sucesso!'))
+      .catch(_ => toast('Erro ao atualizar o usuário!'));
   }
 
   async function handleLogout(e) {
@@ -68,7 +80,7 @@ export default function Profile() {
               { avatarUrl === null ? 
                 <img src={ avatar } width="250" height="250" alt="Foto de perfil do usuario" />
                 :
-                <img src={ avatarUrl } width="250" height="250" alt="Foto de perfil do usuario" />
+                <img src={ avatarImagem } width="250" height="250" alt="Foto de perfil do usuario" />
               }
             </label>
 
