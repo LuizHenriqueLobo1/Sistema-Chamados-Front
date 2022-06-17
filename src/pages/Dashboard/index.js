@@ -1,13 +1,27 @@
 import './dashboard.css';
-import { useState, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 import { FiMessageSquare, FiPlus, FiSearch, FiEdit2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import api from '../../services/api';
 
-export default function Dashboard(){
+export default function Dashboard() {
 
-  const [chamados, setChamados] = useState([1]);
+  const [chamados, setChamados] = useState(
+    [{ cliente: { nome: 'Sujeito' }, chamado: 'EM_ABERTO', assunto: 'SUPORTE', data: '01/01/2022'}]
+  );
+
+  useEffect(() => {
+    api
+      .get('/chamados')
+      .then(response => {
+        if(response.data) {
+          setChamados(response.data);
+        }
+      })
+  }, []);
+
   return(
     <div>
       <Header/>
@@ -17,16 +31,15 @@ export default function Dashboard(){
           <FiMessageSquare size={25} />
         </Title>
 
-        {chamados.length === 0 ? (
+        { chamados.length === 0 ? (
           <div className="container dashboard">
             <span>Nenhum chamado registrado...</span>
-
             <Link to="/new" className="new">
               <FiPlus size={25} color="#FFF" />
               Novo chamado
             </Link>
           </div>
-        )  : (
+          ) : (
           <>
             <Link to="/new" className="new">
               <FiPlus size={25} color="#FFF" />
@@ -44,22 +57,37 @@ export default function Dashboard(){
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td data-label="Cliente">Sujeito</td>
-                  <td data-label="Assunto">Suporte</td>
-                  <td data-label="Status">
-                    <span className="badge" style={{backgroundColor: '#5cb85c' }}>Em aberto</span>
-                  </td>
-                  <td data-label="Cadastrado">20/06/2021</td>
-                  <td data-label="#">
-                    <button className="action" style={{backgroundColor: '#3583f6' }}>
-                      <FiSearch color="#FFF" size={17} />
-                    </button>
-                    <button className="action" style={{backgroundColor: '#F6a935' }}>
-                      <FiEdit2 color="#FFF" size={17} />
-                    </button>
-                  </td>
-                </tr>
+                {chamados.map(chamado => {
+                  return (
+                    <tr>
+                      <td data-label="Cliente">{ chamado.cliente.nome }</td>
+                      <td data-label="Assunto">{ chamado.assunto }</td>
+                      <td data-label="Status">
+                        <span 
+                          className="badge"
+                          style={
+                            chamado.status === 'EM_ABERTO' ? 
+                            { backgroundColor: '#bf2d17' } : 
+                            chamado.status === 'EM_PROGRESSO' ? 
+                            { backgroundColor: '#c2b43c' } : 
+                            { backgroundColor: '#5cb85c'} 
+                          }
+                        >
+                          { chamado.status }
+                        </span>
+                      </td>
+                      <td data-label="Cadastrado">{ chamado.data }</td>
+                      <td data-label="#">
+                        <button className="action" style={{backgroundColor: '#3583f6' }}>
+                          <FiSearch color="#FFF" size={17} />
+                        </button>
+                        <button className="action" style={{backgroundColor: '#F6a935' }}>
+                          <FiEdit2 color="#FFF" size={17} />
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </>
