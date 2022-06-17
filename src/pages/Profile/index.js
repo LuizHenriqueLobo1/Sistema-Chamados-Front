@@ -27,9 +27,12 @@ export default function Profile() {
       .get(`/usuarios/${user.uid}`)
       .then(response => {
         setNome(response.data.nome);
+        if(response.data.foto) {
+          setAvatarUrl(true);
+          setAvatarImagem(`data:image/png;base64,${response.data.foto}`);
+        }
       });
   }, []);
-
 
   function handleUploadImage(imagem) {
     setAvatarUrl(imagem ? imagem : null);
