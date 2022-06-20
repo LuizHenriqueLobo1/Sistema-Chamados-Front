@@ -6,6 +6,7 @@ import { FiMessageSquare, FiPlus, FiSearch, FiEdit2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import DetalheChamado from './Detalhe-Chamado';
+import { formataStatus } from '../../utils/utils';
 
 export default function Dashboard() {
 
@@ -83,7 +84,7 @@ export default function Dashboard() {
                             { backgroundColor: '#5cb85c'} 
                           }
                         >
-                          { chamado.status }
+                          { formataStatus(chamado.status) }
                         </span>
                       </td>
                       <td data-label="Cadastrado">{ chamado.data }</td>

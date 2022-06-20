@@ -16,3 +16,11 @@ export function getDataAtualFormatada() {
 function formataSeMenorQueDez(data) {
     return data < 10 ? `0${data}` : `${data}`;
 }
+
+export function formataStatus(status) {
+    switch(status) {
+        case 'EM_ABERTO':    return 'Em Aberto';
+        case 'EM_PROGRESSO': return 'Em Progresso'; 
+        case 'ATENDIDO':     return 'Atendido';
+    }
+}
