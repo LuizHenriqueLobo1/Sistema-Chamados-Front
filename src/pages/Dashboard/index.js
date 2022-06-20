@@ -57,9 +57,9 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {chamados.map(chamado => {
+                {chamados.map((chamado, index) => {
                   return (
-                    <tr>
+                    <tr key={ index }>
                       <td data-label="Cliente">{ chamado.cliente.nome }</td>
                       <td data-label="Assunto">{ chamado.assunto }</td>
                       <td data-label="Status">

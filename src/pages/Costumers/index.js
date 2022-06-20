@@ -5,6 +5,7 @@ import Title from '../../components/Title';
 import { toast } from 'react-toastify';
 import api from '../../services/api';
 import { getDataAtualFormatada } from '../../utils/utils';
+import Modal from './EditCostumer';
 import './costumers.css'
 
 export default function Costumers() {
@@ -14,15 +15,15 @@ export default function Costumers() {
   const endereco = useRef();
 
   const [clientes, setClientes] = useState([]);
-
-  const [error, setError] = useState();
+  
+  const [openModal, setOpenModal] = useState(false);
+  const [clienteId, setClienteId] = useState(null);
 
   useEffect(() => {
       async function loadClientes() {
         api
           .get('/clientes')
-          .then(response => setClientes(response.data))
-          .catch(error => setError(error));
+          .then(response => setClientes(response.data));
       }
       loadClientes();
   }, [ clientes ]);
@@ -47,15 +48,20 @@ export default function Costumers() {
         .catch(_ => toast('Erro ao excluir cliente!'));
   }
 
+  async function editar(id) {
+    setOpenModal(true);
+    setClienteId(id);
+  }
+
   return (
       <div>
+          { openModal && <Modal setOpenModal={setOpenModal} clienteId={clienteId}/>}
           <Header />
 
           <div className="content">
               <Title nome="Clientes">
                   <FiUser size={25} />
               </Title>
-
 
               <div className="container">
                   <form onSubmit={ handleSubmit } className="form-profile costumers">
@@ -89,7 +95,7 @@ export default function Costumers() {
                 <tbody>
                   {clientes.map((cliente) => {
                     return (
-                      <tr>
+                      <tr key={ cliente.id }>
                         <td data-label="Cliente">{ cliente.nome }</td>
                         <td data-label="CNPJ">{ cliente.cnpj }</td>
                         <td data-label="Endereço">{ cliente.endereco }</td>
@@ -103,6 +109,7 @@ export default function Costumers() {
                             <FiDelete color="#FFF" size={17} />
                           </button>
                           <button 
+                            onClick={ () => { editar(cliente.id) } } 
                             className="action" 
                             style={{backgroundColor: '#F6a935' }}
                           >
