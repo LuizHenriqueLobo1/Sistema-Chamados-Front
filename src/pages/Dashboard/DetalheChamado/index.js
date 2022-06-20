@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import api from '../../../services/api';
 import './detalhe-chamado.css';
 
-export default function DetalheChamado({ setOpenModal, clienteId }) {
+export default function DetalheChamado({ setOpenModal, chamadoId }) {
 
     const [complemento, setComplemento] = useState();
 
     useEffect(() => {
         async function loadChamado() {
             api
-                .get(`/chamados/${clienteId}`)
+                .get(`/chamados/${chamadoId}`)
                 .then(response => {
                   setComplemento(response.data.complemento);
                 });
@@ -18,9 +18,9 @@ export default function DetalheChamado({ setOpenModal, clienteId }) {
     }, []);
 
     return (
-        <div className="modalBackground">
-          <div className="modalContainer">
-            <div className="titleCloseBtn">
+        <div className="modalBackground-detalhe-chamado">
+          <div className="modalContainer-detalhe-chamado">
+            <div className="titleCloseBtn-detalhe-chamado">
               <button
                 onClick={() => {
                   setOpenModal(false);
@@ -29,11 +29,12 @@ export default function DetalheChamado({ setOpenModal, clienteId }) {
                 X
               </button>
             </div>
-            <div className="title">
+            <div className="title-detalhe-chamado">
               <h1>Detalhamento do Chamado</h1>
             </div>
-            <div className="body">
+            <div className="body-detalhe-chamado">
               <textarea
+                className="textarea-detalhe-chamado"
                 type="text"
                 value={ complemento }
                 disabled

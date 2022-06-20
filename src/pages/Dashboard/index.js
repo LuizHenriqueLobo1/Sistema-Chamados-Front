@@ -5,17 +5,17 @@ import Title from '../../components/Title';
 import { FiMessageSquare, FiPlus, FiSearch, FiEdit2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
-import DetalheChamado from './Detalhe-Chamado';
+import DetalheChamado from './DetalheChamado';
+import EditarChamado from './EditChamado';
 import { formataStatus } from '../../utils/utils';
 
 export default function Dashboard() {
 
-  const [chamados, setChamados] = useState(
-    [{ cliente: { nome: 'Sujeito' }, chamado: 'EM_ABERTO', assunto: 'SUPORTE', data: '01/01/2022'}]
-  );
+  const [chamados, setChamados] = useState([]);
 
-  const [openModal, setOpenModal] = useState(false);
-  const [clienteId, setClienteId] = useState();
+  const [openDetalhe, setOpenDetalhe] = useState(false);
+  const [openEditar,  setOpenEditar]  = useState(false);
+  const [chamadoId, setChamadoId]     = useState();
 
   useEffect(() => {
     api
@@ -24,17 +24,23 @@ export default function Dashboard() {
         if(response.data) {
           setChamados(response.data);
         }
-      })
-  }, []);
+      });
+  }, [ chamados ]);
 
   function detalhar(id) {
-    setOpenModal(true);
-    setClienteId(id);
+    setOpenDetalhe(true);
+    setChamadoId(id);
+  }
+
+  function editar(id) {
+    setOpenEditar(true);
+    setChamadoId(id);
   }
 
   return(
     <div>
-      { openModal && <DetalheChamado setOpenModal={setOpenModal} clienteId={clienteId}/>}
+      { openDetalhe && <DetalheChamado setOpenModal={ setOpenDetalhe } chamadoId={ chamadoId }/>}
+      { openEditar  && <EditarChamado  setOpenModal={ setOpenEditar  } chamadoId={ chamadoId }/>}
       <Header/>
 
       <div className="content">
@@ -96,7 +102,11 @@ export default function Dashboard() {
                         >
                           <FiSearch color="#FFF" size={17} />
                         </button>
-                        <button className="action" style={{backgroundColor: '#F6a935' }}>
+                        <button
+                        onClick={ () => { editar(chamado.id) } }
+                          className="action" 
+                          style={{backgroundColor: '#F6a935' }}
+                        >
                           <FiEdit2 color="#FFF" size={17} />
                         </button>
                       </td>

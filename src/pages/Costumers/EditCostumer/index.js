@@ -41,9 +41,9 @@ function EditCostumer({ setOpenModal, clienteId }) {
   }
 
   return (
-    <div className="modalBackground">
-      <div className="modalContainer">
-        <div className="titleCloseBtn">
+    <div className="modalBackground-costumer">
+      <div className="modalContainer-costumer">
+        <div className="titleCloseBtn-costumer">
           <button
             onClick={() => {
               setOpenModal(false);
@@ -52,10 +52,10 @@ function EditCostumer({ setOpenModal, clienteId }) {
             X
           </button>
         </div>
-        <div className="title">
+        <div className="title-costumer">
           <h1>Editar Cliente</h1>
         </div>
-        <div className="body">
+        <div className="body-costumer">
           <form className="form-profile costumers">
               <label>Nome</label>
               <input ref={ nome } placeholder="Digite o Nome Fantasia" type="text"/>
@@ -67,7 +67,7 @@ function EditCostumer({ setOpenModal, clienteId }) {
               <input ref={ endereco } placeholder="Digite o seu Endereço" type="text"/>
           </form>
         </div>
-        <div className="footer">
+        <div className="footer-costumer">
           <button
             onClick={() => { setOpenModal(false) }}
             id="cancelBtn"

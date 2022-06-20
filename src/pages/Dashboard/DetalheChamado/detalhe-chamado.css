@@ -1,4 +1,4 @@
-.modalBackground {
+.modalBackground-detalhe-chamado {
     width: 100vw;
     height: 100vh;
     background-color: rgba(200, 200, 200, 0.800);
@@ -8,7 +8,7 @@
     align-items: center;
 }
   
-.modalContainer {
+.modalContainer-detalhe-chamado {
     width: 500px;
     height: 360px;
     border-radius: 12px;
@@ -19,30 +19,31 @@
     padding: 25px;
 }
 
-.modalContainer .title {
+.modalContainer-detalhe-chamado .title-detalhe-chamado {
     display: inline-block;
     text-align: center;
     margin-top: 10px;
 }
 
-.titleCloseBtn {
+.titleCloseBtn-detalhe-chamado {
     display: flex;
     justify-content: flex-end;
 }
 
-.titleCloseBtn button {
+.titleCloseBtn-detalhe-chamado button {
     background-color: transparent;
     border: none;
     font-size: 25px;
     cursor: pointer;
 }
 
-.modalContainer .body {
+.modalContainer-detalhe-chamado .body-detalhe-chamado {
     flex: 50%;
     display: flex;
 }
 
-textarea {
+.textarea-detalhe-chamado {
+    margin-top: 20px;
     width: 100%;
     resize: none;
 }
