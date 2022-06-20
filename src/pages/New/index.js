@@ -12,7 +12,7 @@ export default function New() {
     const [clientes, setClientes]               = useState([]);
     const [loadingClientes, setLoadingClientes] = useState(true);
 
-    const [cliente, setCliente]         = useState('1');
+    const [cliente, setCliente]         = useState();
     const [assunto, setAssunto]         = useState('SUPORTE');
     const [status, setStatus]           = useState('EM_ABERTO');
     const [complemento, setComplemento] = useState('');
@@ -22,6 +22,7 @@ export default function New() {
         async function loadClientes() {
             api.get('/clientes').then(response => {
                 setClientes(response.data);
+                setCliente(response.data[0].id);
                 setLoadingClientes(false);
             });
         }
