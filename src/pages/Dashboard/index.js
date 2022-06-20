@@ -5,12 +5,16 @@ import Title from '../../components/Title';
 import { FiMessageSquare, FiPlus, FiSearch, FiEdit2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
+import DetalheChamado from './Detalhe-Chamado';
 
 export default function Dashboard() {
 
   const [chamados, setChamados] = useState(
     [{ cliente: { nome: 'Sujeito' }, chamado: 'EM_ABERTO', assunto: 'SUPORTE', data: '01/01/2022'}]
   );
+
+  const [openModal, setOpenModal] = useState(false);
+  const [clienteId, setClienteId] = useState();
 
   useEffect(() => {
     api
@@ -22,8 +26,14 @@ export default function Dashboard() {
       })
   }, []);
 
+  function detalhar(id) {
+    setOpenModal(true);
+    setClienteId(id);
+  }
+
   return(
     <div>
+      { openModal && <DetalheChamado setOpenModal={setOpenModal} clienteId={clienteId}/>}
       <Header/>
 
       <div className="content">
@@ -78,7 +88,11 @@ export default function Dashboard() {
                       </td>
                       <td data-label="Cadastrado">{ chamado.data }</td>
                       <td data-label="#">
-                        <button className="action" style={{backgroundColor: '#3583f6' }}>
+                        <button 
+                          onClick={ () => { detalhar(chamado.id) } } 
+                          className="action" 
+                          style={{backgroundColor: '#3583f6' }}
+                        >
                           <FiSearch color="#FFF" size={17} />
                         </button>
                         <button className="action" style={{backgroundColor: '#F6a935' }}>

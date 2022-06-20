@@ -5,7 +5,7 @@ import Title from '../../components/Title';
 import { toast } from 'react-toastify';
 import api from '../../services/api';
 import { getDataAtualFormatada } from '../../utils/utils';
-import Modal from './EditCostumer';
+import EditCostumer from './EditCostumer';
 import './costumers.css'
 
 export default function Costumers() {
@@ -48,14 +48,14 @@ export default function Costumers() {
         .catch(_ => toast('Erro ao excluir cliente!'));
   }
 
-  async function editar(id) {
+  function editar(id) {
     setOpenModal(true);
     setClienteId(id);
   }
 
   return (
       <div>
-          { openModal && <Modal setOpenModal={setOpenModal} clienteId={clienteId}/>}
+          { openModal && <EditCostumer setOpenModal={setOpenModal} clienteId={clienteId}/>}
           <Header />
 
           <div className="content">
