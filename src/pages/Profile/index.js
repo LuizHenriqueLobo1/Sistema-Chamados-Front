@@ -55,6 +55,7 @@ export default function Profile() {
   async function handleLogout(e) {
     e.preventDefault();
     try {
+      localStorage.clear();
       await logOut();
       navigate('/');
     } catch(error) {

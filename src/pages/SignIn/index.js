@@ -1,6 +1,6 @@
 import logo from '../../assets/login.png'
 import { Link, useNavigate } from 'react-router-dom'
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useUserAuth } from '../../contexts/auth';
 import './signin.css'
 
@@ -15,8 +15,26 @@ export default function SignIn() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const user = {
+      email: localStorage.getItem('user-email'),
+      senha: localStorage.getItem('user-senha'),
+    };
+    if(user.email && user.senha) {
+      email.current.value = user.email;
+      senha.current.value = user.senha;
+      makeLogin();
+    }
+  }, []);
+
   async function handleSubmit(e) {
     e.preventDefault();
+    makeLogin();
+    localStorage.setItem('user-email', email.current.value);
+    localStorage.setItem('user-senha', senha.current.value);
+  }
+
+  async function makeLogin() {
     try {
       await signIn(
         email.current.value,
@@ -27,7 +45,7 @@ export default function SignIn() {
       switch(error.code) {
         case 'auth/user-not-found': setError('Usuário não encontrado!');       break;
         case 'auth/wrong-password': setError('Senha incorreta!');              break;
-        case 'auth/invalid-email':  setError('E-mail inválido!');        break;
+        case 'auth/invalid-email':  setError('E-mail inválido!');              break;
         default:                    setError('Ocorreu um erro desconhecido!'); break;
       }
     }
