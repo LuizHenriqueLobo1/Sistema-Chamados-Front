@@ -1,5 +1,5 @@
 import './dashboard.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 import { FiMessageSquare, FiPlus, FiSearch, FiEdit2 } from 'react-icons/fi';
@@ -8,8 +8,11 @@ import api from '../../services/api';
 import DetalheChamado from './DetalheChamado';
 import EditarChamado from './EditChamado';
 import { formataStatus } from '../../utils/utils';
+import { useUserAuth } from '../../contexts/auth';
 
 export default function Dashboard() {
+
+  const { user, foto, setFoto } = useUserAuth();
 
   const [chamados, setChamados] = useState([]);
 
@@ -25,7 +28,19 @@ export default function Dashboard() {
           setChamados(response.data);
         }
       });
-  }, [ chamados ]);
+    if(!foto) {
+      api
+      .get(`/usuarios/${user.uid}`)
+      .then(response => {
+        if(response.data) {
+          const foto = response.data.foto;
+          if(foto) {
+            setFoto(`data:image/png;base64,${response.data.foto}`);
+          }
+        }
+      });
+    }
+  }, []);
 
   function detalhar(id) {
     setOpenDetalhe(true);

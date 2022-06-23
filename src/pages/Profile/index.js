@@ -11,7 +11,7 @@ import './profile.css';
 
 export default function Profile() {
   
-  const { user, logOut } = useUserAuth();
+  const { user, setFoto, logOut } = useUserAuth();
 
   const [nome, setNome]   = useState();
   const [email, setEmail] = useState();
@@ -48,7 +48,11 @@ export default function Profile() {
     const header = { "Content-Type": "multipart/form-data" };
     api
       .put(`/usuarios/${user.uid}`, formData, header)
-      .then(_ =>  toast('Usuário atualizado com sucesso!'))
+      .then(_ =>  {
+        setFoto(avatarImagem);
+        toast('Usuário atualizado com sucesso!');
+        
+      })
       .catch(_ => toast('Erro ao atualizar o usuário!'));
   }
 

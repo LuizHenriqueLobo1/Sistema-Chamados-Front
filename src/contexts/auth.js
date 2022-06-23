@@ -12,6 +12,7 @@ export const AuthContext = createContext({});
 export function AuthProvider({ children }) {
 
     const [user, setUser] = useState(null);
+    const [foto, setFoto] = useState(null);
 
     async function signUp(email, password) {
         return await createUserWithEmailAndPassword(auth, email, password);
@@ -34,7 +35,9 @@ export function AuthProvider({ children }) {
 
     const value = {
         user,
+        foto,
         setUser,
+        setFoto,
         signUp,
         signIn,
         logOut
