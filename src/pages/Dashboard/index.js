@@ -40,7 +40,7 @@ export default function Dashboard() {
         }
       });
     }
-  }, []);
+  }, [ chamados ]);
 
   function detalhar(id) {
     setOpenDetalhe(true);
